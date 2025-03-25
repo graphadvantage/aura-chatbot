@@ -21,6 +21,8 @@ class Routes:
                 history, _, current_session_id = self._message_history.create_history(session_id=question.session_id)
 
                 input = question.question
+                history.add_message({"role": "user", "content": input})
+
                 response = self._rag.search(
                     query_text=input, 
                     retriever_config={"top_k": 10}, 
@@ -28,7 +30,6 @@ class Routes:
                     message_history=history
                 )
                 
-                history.add_message({"role": "user", "content": input})
                 history.add_message({"role": "assistant", "content": response.answer})
                 
                 print(f"{question.question}")
