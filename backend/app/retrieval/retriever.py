@@ -15,7 +15,7 @@ class Retriever:
     )
 
     def __init__(self, driver, embedder, index_name):
-        self._retreiver = VectorCypherRetriever(
+        self._retriever = VectorCypherRetriever(
             driver,
             index_name=index_name,
             retrieval_query=self.RETRIEVAL_QUERY,
@@ -47,6 +47,6 @@ class Retriever:
     
     @property
     def retriever(self):
-        return self._retreiver
+        return self._retriever
 
 

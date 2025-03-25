@@ -1,9 +1,22 @@
-from embedding import Embedding
-from driver import Neo4jDriver
+from app.database.embedding import Embedding
+from app.database.driver import Neo4jDriver
+from app.config import NEO4J_URI,NEO4J_USERNAME, NEO4J_PASSWORD, OPENAI_API_KEY
+
+embedder_instance = Embedding.get_instance(
+    api_key=OPENAI_API_KEY
+)
+
+embedder = embedder_instance.embedder
 
 
-embedder = Embedding.get_instance().embedder
-driver = Neo4jDriver.get_instance().driver
+driver_instance = Neo4jDriver.get_instance(
+    uri=NEO4J_URI,
+    username=NEO4J_USERNAME,
+    password=NEO4J_PASSWORD
+)
+
+driver = driver_instance.driver
+
 
 with driver.session() as session:
     res = session.run(
