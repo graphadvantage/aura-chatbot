@@ -81,9 +81,9 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     const query1 = `
     MATCH (a:Chunk)-[r:PART_OF_DOCUMENT]->(d:Document)
     WHERE elementId(a) in [${formattedSources}]
-    MATCH (b:Entity)
+    MATCH (b:Entity)<-[r2:HAS_ENTITY]-(a)
     WHERE elementId(b) in [${formattedSources}]
-    RETURN a,b,d LIMIT 100
+    RETURN a,b,d,r,r2 LIMIT 1000
     `;
 
     const query2 = `

@@ -81,7 +81,6 @@ export async function runQuery(query: string) {
         labels: nodeDoc.labels,
         properties: nodeDoc.properties,
       });
-/*
       const rel = record.get('r');
       rels.push({
         id: rel.elementId,
@@ -98,7 +97,6 @@ export async function runQuery(query: string) {
         type: rel2.type,
         properties: rel2.properties,
       });
-*/
     }
     console.log(rels);
     return { nodes: nodes, rels: rels };
