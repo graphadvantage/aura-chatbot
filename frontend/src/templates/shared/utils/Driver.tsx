@@ -75,6 +75,13 @@ export async function runQuery(query: string) {
         labels: nodeEnd.labels,
         properties: nodeEnd.properties,
       });
+      const nodeDoc = record.get('d');
+      nodes.push({
+        id: nodeDoc.identity.low,
+        labels: nodeDoc.labels,
+        properties: nodeDoc.properties,
+      });
+/*
       const rel = record.get('r');
       rels.push({
         id: rel.elementId,
@@ -91,12 +98,7 @@ export async function runQuery(query: string) {
         type: rel2.type,
         properties: rel2.properties,
       });
-      const nodeDoc = record.get('d');
-      nodes.push({
-        id: nodeDoc.identity.low,
-        labels: nodeDoc.labels,
-        properties: nodeDoc.properties,
-      });
+*/
     }
     console.log(rels);
     return { nodes: nodes, rels: rels };

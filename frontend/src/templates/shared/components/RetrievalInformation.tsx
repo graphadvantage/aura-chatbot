@@ -78,6 +78,14 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
   function run() {
     const formattedSources = sources.map((source) => `"${source}"`).join(',');
 
+    const query1 = `
+    MATCH (a:Chunk)-[r:PART_OF_DOCUMENT]->(d:Document)
+    WHERE elementId(a) in [${formattedSources}]
+    MATCH (b:Entity)
+    WHERE elementId(b) in [${formattedSources}]
+    RETURN a,b,d LIMIT 100
+    `;
+
     const query2 = `
     MATCH (a:Chunk)-[r2:PART_OF]-(d:Document)
     WHERE elementId(a) in [${formattedSources}]
@@ -87,16 +95,24 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     `;
 
     setDriver(uri, username, password).then((isSuccessful) => {
-      runQuery(query2).then((result) => {
+      runQuery(query1).then((result) => {
         result.nodes.map((record: any) => {
-          const label = record.labels.includes('Entity') ? record.properties.id : record.labels;
+
+          const label = record.labels.includes('Entity')
+            ? record.properties.text
+            : record.labels.includes('Document')
+            ? record.labels
+            : record.labels
+
+
           const color = record.labels.includes('Chunk')
             ? '#0A6190'
             : record.labels.includes('Document')
             ? '#BCF194'
             : record.labels.includes('Entity')
             ? '#B38EFF'
-            : '#FF8E6A';
+            : '#FF8E6A'
+
           setNodes((prevNodes) => [
             ...prevNodes,
             { id: record.id.toString(), color: color, captions: [{ value: label }], properties: record.properties },
@@ -192,9 +208,9 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             }}>
               <Drawer.Header>Node details</Drawer.Header>
               <Drawer.Body className='max-w-[300px]'>
-                {expandedNode?.captions[0]?.value?.includes('Chunk') ? (<Typography variant='h5'>Chunk text: </Typography>) : expandedNode?.captions[0]?.value?.includes('Document') ? (<Typography variant='h5'>Document: </Typography>) : (<Typography variant='h5'>Entity description: </Typography>)}
+                {expandedNode?.captions[0]?.value?.includes('Chunk') ? (<Typography variant='h5'>Chunk: </Typography>) : expandedNode?.captions[0]?.value?.includes('Document') ? (<Typography variant='h5'>Document: </Typography>) : (<Typography variant='h5'>Entity: </Typography>)}
                 <ReactMarkdown>
-                  {expandedNode?.properties?.text ?? expandedNode?.properties?.fileName ?? expandedNode?.properties?.id}
+                  {expandedNode?.properties?.text ?? expandedNode?.properties?.name ?? expandedNode?.properties?.id}
                 </ReactMarkdown>
                 </Drawer.Body>
             </Drawer>
