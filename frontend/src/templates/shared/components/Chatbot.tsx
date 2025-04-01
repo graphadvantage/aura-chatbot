@@ -258,7 +258,7 @@ export default function Chatbot(props: ChatbotProps) {
   useEffect(() => {
     const initialMessage = {
       id: 1,
-      message: `Hello! I'm a chatbot built on a Neo4j Knowledge Graph.
+      message: `Hello! I'm a Chatbot built on a Neo4j Knowledge Graph.
       \n I can help you answer any questions you might have.
       \n How can I help you today?`,
       user: 'chatbot',
@@ -272,7 +272,7 @@ export default function Chatbot(props: ChatbotProps) {
   return (
     <>
       <Header
-        title='GraphRAG'
+        title='GraphRAG Using Vector+FullText Retriever with Traversal to Adjacent Context'
         useNeo4jConnect={false}
       />
       <div className='n-bg-palette-neutral-bg-default flex flex-col justify-between min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] overflow-hidden'>

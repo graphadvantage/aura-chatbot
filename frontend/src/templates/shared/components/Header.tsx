@@ -54,7 +54,7 @@ export default function Header({
         id='navigation'
         aria-label='main navigation'
       >
-        <section className='flex md:flex-row flex-col items-center w-1/6 shrink-0 grow-0'>
+        <section className='flex md:flex-row flex-col items-center w-0.8 shrink-0 grow-0'>
           <div className='md:inline-block'>
             <Logo className='h-6 min-h-6 min-w-12 md:h-8 md:min-h-12 md:min-w-24 md:mr-2' type='full' />
           </div>
