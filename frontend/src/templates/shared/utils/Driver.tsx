@@ -28,10 +28,76 @@ export async function disconnect() {
   }
 }
 
+export async function runQuery(query: string) {
+  const nodes = [];
+  const rels = [];
+  try {
+    let { records } = await driver.executeQuery(query);
+    //console.log(records);
+    for (let record of records) {
+
+      const nodeStart = record.get('a');
+      nodes.push({
+        id: nodeStart.identity.low,
+        labels: nodeStart.labels,
+        properties: nodeStart.properties,
+      });
+      const nodeEnd = record.get('b');
+      nodes.push({
+        id: nodeEnd.identity.low,
+        labels: nodeEnd.labels,
+        properties: nodeEnd.properties,
+      });
+      const nodeNext = record.get('c');
+      nodes.push({
+        id: nodeNext.identity.low,
+        labels: nodeNext.labels,
+        properties: nodeNext.properties,
+      });
+      const nodeDoc = record.get('d');
+      nodes.push({
+        id: nodeDoc.identity.low,
+        labels: nodeDoc.labels,
+        properties: nodeDoc.properties,
+      });
+
+      const rel = record.get('r');
+      rels.push({
+        id: rel.elementId,
+        start: rel.start.low,
+        end: rel.end.low,
+        type: rel.type,
+        properties: rel.properties,
+      });
+      const rel2 = record.get('r2');
+      rels.push({
+        id: rel2.elementId,
+        start: rel2.start.low,
+        end: rel2.end.low,
+        type: rel2.type,
+        properties: rel2.properties,
+      });
+      const rel3 = record.get('r3');
+      rels.push({
+        id: rel3.elementId,
+        start: rel3.start.low,
+        end: rel3.end.low,
+        type: rel3.type,
+        properties: rel3.properties,
+      });
+    }
+    //console.log(rels);
+    return { nodes: nodes, rels: rels };
+  } catch (err) {
+    console.error(`Query error\n${err}\nCause: ${err as Error}`);
+    return [];
+  }
+}
+
 /*
   Everything below this line is only for providing examples based on datasets available in Neo4j Sandbox (sandbox.neo4j.com).
   When using this code in your own project, you should remove the examples below and use your own queries.
-*/
+
 export async function runRecoQuery(query: string) {
   const reco = [];
   try {
@@ -55,53 +121,4 @@ export async function runRecoQuery(query: string) {
     return false;
   }
 }
-
-export async function runQuery(query: string) {
-  const nodes = [];
-  const rels = [];
-  try {
-    let { records } = await driver.executeQuery(query);
-    console.log(records);
-    for (let record of records) {
-      const nodeStart = record.get('a');
-      nodes.push({
-        id: nodeStart.identity.low,
-        labels: nodeStart.labels,
-        properties: nodeStart.properties,
-      });
-      const nodeEnd = record.get('b');
-      nodes.push({
-        id: nodeEnd.identity.low,
-        labels: nodeEnd.labels,
-        properties: nodeEnd.properties,
-      });
-      const nodeDoc = record.get('d');
-      nodes.push({
-        id: nodeDoc.identity.low,
-        labels: nodeDoc.labels,
-        properties: nodeDoc.properties,
-      });
-      const rel = record.get('r');
-      rels.push({
-        id: rel.elementId,
-        start: rel.start.low,
-        end: rel.end.low,
-        type: rel.type,
-        properties: rel.properties,
-      });
-      const rel2 = record.get('r2');
-      rels.push({
-        id: rel2.elementId,
-        start: rel2.start.low,
-        end: rel2.end.low,
-        type: rel2.type,
-        properties: rel2.properties,
-      });
-    }
-    console.log(rels);
-    return { nodes: nodes, rels: rels };
-  } catch (err) {
-    console.error(`Query error\n${err}\nCause: ${err as Error}`);
-    return [];
-  }
-}
+*/

@@ -7,13 +7,23 @@ class Retriever:
 
     _instance = None
 
-    RETRIEVAL_QUERY = (
+#this query pulls the UnstructredElements parsed from the chunk
+    RETRIEVAL_QUERY_OLD= (
         """
         with node, score OPTIONAL MATCH (node)-[]-(e:!Chunk&!Document)
         return collect(elementId(node))+collect(elementId(e)) as listIds,
         collect(e.id) as contextNodes, node.text as nodeText, score
         """
     )
+
+#this query pulls the adjacent Chunks, Entities
+    RETRIEVAL_QUERY = (
+            """
+            with node, score OPTIONAL MATCH (node)-[:NEXT_CHUNK|HAS_ENTITY]-(e)
+            return collect(elementId(node))+collect(elementId(e)) as listIds,
+            collect(e.id) as contextNodes, node.text as nodeText, score
+            """
+        )
 
     def __init__(self, driver, embedder, vector_index_name, fulltext_index_name):
         self._retriever = HybridCypherRetriever(

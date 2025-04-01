@@ -188,7 +188,7 @@ export default function Chatbot(props: ChatbotProps) {
       } else {
         setListMessages((msgs) => msgs.map((msg) => (msg.isTyping ? { ...msg, message: currentTypedText } : msg)));
       }
-      setTimeout(() => simulateTypingEffect(response, nextIndex), 20);
+      setTimeout(() => simulateTypingEffect(response, nextIndex), 10);
     } else {
       setListMessages((msgs) => msgs.map((msg) => (msg.isTyping ? { ...msg, isTyping: false } : msg)));
     }

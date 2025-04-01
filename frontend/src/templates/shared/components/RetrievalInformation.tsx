@@ -83,7 +83,9 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     WHERE elementId(a) in [${formattedSources}]
     MATCH (b:Entity)<-[r2:HAS_ENTITY]-(a)
     WHERE elementId(b) in [${formattedSources}]
-    RETURN a,b,d,r,r2 LIMIT 1000
+    MATCH (a)-[r3:NEXT_CHUNK]-(c)
+    WHERE elementId(a) in [${formattedSources}] AND elementId(c) in [${formattedSources}]
+    RETURN a,b,c,d,r,r2,r3 LIMIT 250
     `;
 
     const query2 = `
