@@ -22,7 +22,7 @@ with driver.session() as session:
     res = session.run(
         """
         MATCH (e:Chunk)
-        WHERE e.text IS NOT NULL AND e.morganEmbedding IS NULL
+        WHERE e.text IS NOT NULL AND e.embedding IS NULL
         RETURN e.id as id, e.text as data
         """
     )
@@ -37,7 +37,7 @@ with driver.session() as session:
         session.run(
             """
             MATCH (e:Chunk {id: $chunk_id})
-            SET e.morganEmbedding = $embedding
+            SET e.embedding = $embedding
             """,
             chunk_id=chunk_id,
             embedding=embedding

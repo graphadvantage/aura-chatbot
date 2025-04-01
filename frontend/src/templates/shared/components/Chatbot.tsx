@@ -35,8 +35,8 @@ import Header from './Header';
 
 const url = () => {
   let url = window.location.href.replace('3001', '8000');
-  if (process.env.BACKEND_API_URL) {
-    url = process.env.BACKEND_API_URL;
+  if (process.env.VITE_BACKEND_URL) {
+    url = process.env.VITE_BACKEND_URL;
   }
   return !url || !url.match('/$') ? url : url.substring(0, url.length - 1);
 };
@@ -258,11 +258,9 @@ export default function Chatbot(props: ChatbotProps) {
   useEffect(() => {
     const initialMessage = {
       id: 1,
-      message: `Hello! I am an Aura expert, 
-      
-I can help you answer any questions you might have on Neo4j Aura. 
-
-How can I help you today?`,
+      message: `Hello! I'm a chatbot built on a Neo4j Knowledge Graph.
+      \n I can help you answer any questions you might have.
+      \n How can I help you today?`,
       user: 'chatbot',
       datetime: '01/01/2024 00:00:00',
       typeMessage: 'First',
@@ -274,7 +272,7 @@ How can I help you today?`,
   return (
     <>
       <Header
-        title='Aura AMA'
+        title='GraphRAG'
         useNeo4jConnect={false}
       />
       <div className='n-bg-palette-neutral-bg-default flex flex-col justify-between min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] overflow-hidden'>

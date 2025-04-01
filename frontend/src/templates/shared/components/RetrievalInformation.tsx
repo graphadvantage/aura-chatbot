@@ -39,7 +39,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
 
   useEffect(() => {
     run();
-  
+
   }, []);
 
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -77,22 +77,24 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
 
   function run() {
     const formattedSources = sources.map((source) => `"${source}"`).join(',');
-    const query2 = `  
-    MATCH (a:Chunk)-[r2:PART_OF]-(d:Document) WHERE elementId(a) in [${formattedSources}]
+
+    const query2 = `
+    MATCH (a:Chunk)-[r2:PART_OF]-(d:Document)
+    WHERE elementId(a) in [${formattedSources}]
     MATCH (a)-[r]-(b)
     WHERE elementId(b) IN [${formattedSources}]
-    RETURN a, r, b, r2, d LIMIT 1000
-
+    RETURN a,b,r,r2,d LIMIT 100
     `;
+
     setDriver(uri, username, password).then((isSuccessful) => {
       runQuery(query2).then((result) => {
         result.nodes.map((record: any) => {
-          const label = record.labels.includes("__Entity__") ? record.properties.id : record.labels;
+          const label = record.labels.includes('Entity') ? record.properties.id : record.labels;
           const color = record.labels.includes('Chunk')
             ? '#0A6190'
             : record.labels.includes('Document')
             ? '#BCF194'
-            : record.labels.includes('__Entity__')
+            : record.labels.includes('Entity')
             ? '#B38EFF'
             : '#FF8E6A';
           setNodes((prevNodes) => [

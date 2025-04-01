@@ -1,23 +1,25 @@
 import neo4j
-from neo4j_graphrag.retrievers import VectorCypherRetriever
+#from neo4j_graphrag.retrievers import VectorCypherRetriever
+from neo4j_graphrag.retrievers import HybridCypherRetriever
 from neo4j_graphrag.types import RetrieverResultItem
 
 class Retriever:
-    
+
     _instance = None
 
     RETRIEVAL_QUERY = (
         """
-        with node, score OPTIONAL MATCH (node)-[]-(e:!Chunk&!Document) 
-        return collect(elementId(node))+collect(elementId(e)) as listIds, 
+        with node, score OPTIONAL MATCH (node)-[]-(e:!Chunk&!Document)
+        return collect(elementId(node))+collect(elementId(e)) as listIds,
         collect(e.id) as contextNodes, node.text as nodeText, score
         """
     )
 
-    def __init__(self, driver, embedder, index_name):
-        self._retriever = VectorCypherRetriever(
+    def __init__(self, driver, embedder, vector_index_name, fulltext_index_name):
+        self._retriever = HybridCypherRetriever(
             driver,
-            index_name=index_name,
+            vector_index_name=vector_index_name,
+            fulltext_index_name=fulltext_index_name,
             retrieval_query=self.RETRIEVAL_QUERY,
             result_formatter=self.formatter,
             embedder=embedder,
@@ -32,21 +34,19 @@ class Retriever:
         context_nodes = record.get("contextNodes")
 
         return RetrieverResultItem(
-            content=f"{node_text}: score {score}, Related context: {context_nodes}", 
+            content=f"{node_text}: score {score}, Related context: {context_nodes}",
             metadata={
                 "listIds": list_ids,
                 "nodeText": node_text
             }
         )
-    
+
     @classmethod
-    def get_instance(cls, driver, embedder, index_name=None):
+    def get_instance(cls, driver, embedder, vector_index_name=None,fulltext_index_name=None):
         if cls._instance is None:
-            cls._instance = cls(driver, embedder, index_name)
+            cls._instance = cls(driver, embedder, vector_index_name,fulltext_index_name)
         return cls._instance
-    
+
     @property
     def retriever(self):
         return self._retriever
-
-

@@ -1,11 +1,12 @@
 import uvicorn
 
 from app.config import (
-    NEO4J_URI, 
-    NEO4J_USERNAME, 
+    NEO4J_URI,
+    NEO4J_USERNAME,
     NEO4J_PASSWORD,
     OPENAI_API_KEY,
     VECTOR_INDEX_NAME,
+    FULLTEXT_INDEX_NAME,
     ALLOWED_ORIGINS
 )
 
@@ -31,9 +32,10 @@ embedder = embedder_instance.embedder
 
 
 retriever_instance = Retriever.get_instance(
-    driver=driver, 
+    driver=driver,
     embedder=embedder,
-    index_name=VECTOR_INDEX_NAME
+    vector_index_name=VECTOR_INDEX_NAME,
+    fulltext_index_name=FULLTEXT_INDEX_NAME
 )
 
 retriever = retriever_instance.retriever
@@ -47,7 +49,7 @@ llm = llm_instance.llm
 
 
 agent_instance = Agent.get_instance(
-    retriever=retriever, 
+    retriever=retriever,
     llm=llm
 )
 
@@ -67,9 +69,9 @@ app = api_instance.app
 
 
 routes = Routes(
-    app=app, 
-    rag=rag, 
-    message_history=message_history, 
+    app=app,
+    rag=rag,
+    message_history=message_history,
     allowed_origins=ALLOWED_ORIGINS
 )
 
@@ -78,4 +80,4 @@ def shutdown_event():
     driver.close()
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
