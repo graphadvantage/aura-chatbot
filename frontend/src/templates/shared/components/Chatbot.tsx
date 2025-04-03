@@ -34,6 +34,8 @@ import RetrievalInformation from './RetrievalInformation';
 
 ///  IMAGES AND TABLES ///
 import ContentInformation from './ContentInformation';
+import {contentImg} from './test-image';
+import {contentTbl} from './test-table';
 
 import Header from './Header';
 
@@ -109,8 +111,10 @@ export default function Chatbot(props: ChatbotProps) {
   const [value, copy] = useCopyToClipboard();
 
 ///  IMAGES AND TABLES ///
-  const [contentTypeModal, setContentTypeModal] = useState<string>('');
-  const [contentModal, setContentModal] = useState<string>('');
+  const [isOpenModal1, setIsOpenModal1] = useState<boolean>(false);
+  const handleCloseModal1 = () => setIsOpenModal1(false);
+  const [contentTypeModal1, setContentTypeModal1] = useState<string>('');
+  const [contentModal1, setContentModal1] = useState<string>('');
 
   const [activeNavItem, setActiveNavItem] = useState<string>('Chatbot');
 
@@ -382,9 +386,9 @@ export default function Chatbot(props: ChatbotProps) {
                                     isClean
                                     ariaLabel='Search Icon'
                                     onClick={() => {
-                                      setContentTypeModal(chat.entities ?? []);
-                                      setContentModal(chat.model ?? '');
-                                      setIsOpenModal(true);
+                                      setContentTypeModal1('Image' ?? '');
+                                      setContentModal1(contentImg ?? '');
+                                      setIsOpenModal1(true);
                                     }}
                                     isDisabled={loading}
                                   >
@@ -488,12 +492,12 @@ export default function Chatbot(props: ChatbotProps) {
                 id: 'default-menu',
                 className: 'n-p-token-4 n-bg-palette-neutral-bg-weak n-rounded-lg max-h-[90%] min-w-[60%]',
               }}
-              onClose={handleCloseModal}
-              isOpen={isOpenModal}
+              onClose={handleCloseModal1}
+              isOpen={isOpenModal1}
             >
               <ContentInformation
-                type={contentTypeModal}
-                content={contentModal}
+                type={contentTypeModal1}
+                content={contentModal1}
               />
             </Modal>
       </div>
