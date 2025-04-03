@@ -8,8 +8,6 @@ import PageNotFound from './templates/shared/components/PageNotFound';
 import Chatbot from './templates/shared/components/Chatbot';
 import messagesData from './templates/shared/assets/ChatbotMessages.json';
 
-import './ConnectionModal.css';
-
 function App() {
   const messages = messagesData.listMessages;
   return (

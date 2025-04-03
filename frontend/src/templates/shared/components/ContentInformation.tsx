@@ -18,8 +18,10 @@ interface ModalProps {
 function ContentInformation({ type, content }) {
 
   function run() {
-    const type = "Image";
-    const content = contentImg;
+    //const type = "Image";
+    //const content = contentImg;
+    //const type = "Table";
+    //const content = contentTbl;
   }
 
   console.log(type);
@@ -41,7 +43,7 @@ function ContentInformation({ type, content }) {
             margin: 10,
             borderRadius: 25,
             border: '2px solid #2AADA5',
-            height: 650,
+            maxHeight: 650,
             background: `rgb(var(--theme-palette-primary-bg-weaker))`,
             boxShadow: `2px -2px 10px grey`,
             position: 'relative',

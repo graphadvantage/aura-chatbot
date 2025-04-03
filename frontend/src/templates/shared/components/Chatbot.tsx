@@ -34,6 +34,7 @@ import RetrievalInformation from './RetrievalInformation';
 
 ///  IMAGES AND TABLES ///
 import ContentInformation from './ContentInformation';
+
 import {contentImg} from './test-image';
 import {contentTbl} from './test-table';
 
@@ -115,6 +116,15 @@ export default function Chatbot(props: ChatbotProps) {
   const handleCloseModal1 = () => setIsOpenModal1(false);
   const [contentTypeModal1, setContentTypeModal1] = useState<string>('');
   const [contentModal1, setContentModal1] = useState<string>('');
+
+  //const type = "Table";
+  //const content = contentTbl;
+
+  const type = "Image";
+  const content = contentImg;
+  
+/// END IMAGES AND TABLES ///
+
 
   const [activeNavItem, setActiveNavItem] = useState<string>('Chatbot');
 
@@ -386,8 +396,8 @@ export default function Chatbot(props: ChatbotProps) {
                                     isClean
                                     ariaLabel='Search Icon'
                                     onClick={() => {
-                                      setContentTypeModal1('Image' ?? '');
-                                      setContentModal1(contentImg ?? '');
+                                      setContentTypeModal1(type ?? '');
+                                      setContentModal1(content ?? '');
                                       setIsOpenModal1(true);
                                     }}
                                     isDisabled={loading}
