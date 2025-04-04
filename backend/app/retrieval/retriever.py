@@ -25,12 +25,24 @@ class Retriever:
             """
         )
 
+#this query pulls the adjacent Chunks, Entities, image & table properties
+    RETRIEVAL_QUERY_IMG_TBL = (
+            """
+            WITH node, score OPTIONAL MATCH (node)-[:NEXT_CHUNK|HAS_ENTITY]-(e)
+            RETURN COLLECT(elementId(node))+COLLECT(elementId(e)) AS listIds,
+            COLLECT(e.id) AS contextNodes,node.text AS nodeText, score,
+            node.type AS nodeType,
+            node.text_as_html AS nodeHTML,
+            node.image_base64 AS nodeImage,
+            """
+        )
+
     def __init__(self, driver, embedder, vector_index_name, fulltext_index_name):
         self._retriever = HybridCypherRetriever(
             driver,
             vector_index_name=vector_index_name,
             fulltext_index_name=fulltext_index_name,
-            retrieval_query=self.RETRIEVAL_QUERY,
+            retrieval_query=self.RETRIEVAL_QUERY_IMG_TBL,
             result_formatter=self.formatter,
             embedder=embedder,
             neo4j_database='neo4j',
@@ -47,7 +59,10 @@ class Retriever:
             content=f"{node_text}: score {score}, Related context: {context_nodes}",
             metadata={
                 "listIds": list_ids,
-                "nodeText": node_text
+                "nodeText": node_text,
+                "nodeType": node_type,
+                "nodeHTML": node_html,
+                "nodeImage": node_image
             }
         )
 
