@@ -117,11 +117,11 @@ export default function Chatbot(props: ChatbotProps) {
   const [contentTypeModal1, setContentTypeModal1] = useState<string>('');
   const [contentModal1, setContentModal1] = useState<string>('');
 
-  const type = "Table";
-  const content = contentTbl;
+  //const type = "Table";
+  //const content = contentTbl;
 
-  //const type = "Image";
-  //const content = contentImg;
+  const type = "Image";
+  const content = contentImg;
 
 /// END IMAGES AND TABLES ///
 

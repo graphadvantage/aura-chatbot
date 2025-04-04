@@ -60,7 +60,12 @@ export async function runQuery(query: string) {
         labels: nodeDoc.labels,
         properties: nodeDoc.properties,
       });
-
+      const nodeImgTbl = record.get('e');
+      nodes.push({
+        id: nodeImgTbl.identity.low,
+        labels: nodeImgTbl.labels,
+        properties: nodeImgTbl.properties,
+      });
       const rel = record.get('r');
       rels.push({
         id: rel.elementId,
@@ -84,6 +89,22 @@ export async function runQuery(query: string) {
         end: rel3.end.low,
         type: rel3.type,
         properties: rel3.properties,
+      });
+      const rel4 = record.get('r4');
+      rels.push({
+        id: rel4.elementId,
+        start: rel4.start.low,
+        end: rel4.end.low,
+        type: rel4.type,
+        properties: rel4.properties,
+      });
+      const rel5 = record.get('r4');
+      rels.push({
+        id: rel5.elementId,
+        start: rel5.start.low,
+        end: rel5.end.low,
+        type: rel5.type,
+        properties: rel5.properties,
       });
     }
     //console.log(rels);

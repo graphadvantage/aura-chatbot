@@ -85,7 +85,8 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     WHERE elementId(b) in [${formattedSources}]
     MATCH (a)-[r3:NEXT_CHUNK]-(c)
     WHERE elementId(a) in [${formattedSources}] AND elementId(c) in [${formattedSources}]
-    RETURN a,b,c,d,r,r2,r3 LIMIT 250
+    MATCH (d)-[r4:PART_OF_DOCUMENT]-(e:Image|Table)-[r5:HAS_ENTITY]->(b)
+    RETURN DISTINCT a,b,c,d,e,r,r2,r3,r4,r5 LIMIT 250
     `;
 
     const query2 = `
@@ -104,7 +105,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             ? record.properties.text
             : record.labels.includes('Document')
             ? record.labels
-            : record.labels
+            : record.properties.type
 
 
           const color = record.labels.includes('Chunk')
@@ -113,11 +114,13 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             ? '#BCF194'
             : record.labels.includes('Entity')
             ? '#B38EFF'
+            : record.labels.includes('Image')
+            ? '#FFC300'
             : '#FF8E6A'
 
           setNodes((prevNodes) => [
             ...prevNodes,
-            { id: record.id.toString(), color: color, captions: [{ value: label }], properties: record.properties },
+            { id: record.id.toString(), color: color, captions: [{ value: label, labels: record.labels }], properties: record.properties },
           ]);
         });
 
@@ -210,11 +213,47 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             }}>
               <Drawer.Header>Node details</Drawer.Header>
               <Drawer.Body className='max-w-[300px]'>
-                {expandedNode?.captions[0]?.value?.includes('Chunk') ? (<Typography variant='h5'>Chunk: </Typography>) : expandedNode?.captions[0]?.value?.includes('Document') ? (<Typography variant='h5'>Document: </Typography>) : (<Typography variant='h5'>Entity: </Typography>)}
-                <ReactMarkdown>
-                  {expandedNode?.properties?.text ?? expandedNode?.properties?.name ?? expandedNode?.properties?.id}
-                </ReactMarkdown>
-                </Drawer.Body>
+                {expandedNode?.captions[0]?.labels?.includes('Chunk')
+                ? (<Typography variant='h5'>Text Chunk: </Typography>)
+                : expandedNode?.captions[0]?.labels?.includes('Document')
+                ? (<Typography variant='h5'>Document: </Typography>)
+                : expandedNode?.captions[0]?.labels?.includes('Entity')
+                ? (<Typography variant='h5'>Entity: </Typography>)
+                : expandedNode?.captions[0]?.labels?.includes('Image')
+                ? (<Typography variant='h5'>Image: </Typography>)
+                : expandedNode?.captions[0]?.labels?.includes('Table')
+                ? (<Typography variant='h5'>Table: </Typography>)
+                : (<Typography variant='h5'>Other: </Typography>)}
+
+                {expandedNode?.properties?.type === 'NarrativeText' || expandedNode?.captions[0]?.labels?.includes('Entity','Document')  && (
+                  <ReactMarkdown>
+                    {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
+                  </ReactMarkdown>
+                )}
+
+                {expandedNode?.properties?.type === 'Image' && (
+                  <img
+                    src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
+                    alt="Preview"
+                    className="w-full max-h-full object-top object-cover"
+                  />
+                )}
+
+                {expandedNode?.properties?.type === 'Table' && (
+                  <img
+                    src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
+                    alt="Preview"
+                    className="w-full max-h-full object-top object-cover"
+                  />
+                )}
+
+                {expandedNode?.properties?.type === 'Table' && (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: expandedNode?.properties?.text_as_html }}
+                    className="w-full max-h-full overflow-auto"
+                  />
+                )}
+           </Drawer.Body>
             </Drawer>
           </Box>
         </div>
