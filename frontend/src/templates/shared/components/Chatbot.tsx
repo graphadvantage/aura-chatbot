@@ -16,8 +16,8 @@ import {
   ArrowPathIconOutline,
   SpeakerWaveIconOutline,
   InformationCircleIconOutline,
-  PhotoIconOutline,
 } from '@neo4j-ndl/react/icons';
+
 import { useCopyToClipboard } from '@neo4j-ndl/react';
 
 import ChatBotAvatar from '../assets/chatbot-ai.png';
@@ -110,21 +110,6 @@ export default function Chatbot(props: ChatbotProps) {
   const [modelModal, setModelModal] = useState<string>('');
   const [timeTaken, setTimeTaken] = useState<number>(0);
   const [value, copy] = useCopyToClipboard();
-
-///  IMAGES AND TABLES ///
-  const [isOpenModal1, setIsOpenModal1] = useState<boolean>(false);
-  const handleCloseModal1 = () => setIsOpenModal1(false);
-  const [contentTypeModal1, setContentTypeModal1] = useState<string>('');
-  const [contentModal1, setContentModal1] = useState<string>('');
-
-  //const type = "Table";
-  //const content = contentTbl;
-
-  const type = "Image";
-  const content = contentImg;
-
-/// END IMAGES AND TABLES ///
-
 
   const [activeNavItem, setActiveNavItem] = useState<string>('Chatbot');
 
@@ -376,7 +361,6 @@ export default function Chatbot(props: ChatbotProps) {
                                   >
                                     <SpeakerWaveIconOutline className='w-4 h-4 inline-block' />
                                   </IconButton>
-
                                   <IconButton
                                     isClean
                                     ariaLabel='Search Icon'
@@ -391,21 +375,6 @@ export default function Chatbot(props: ChatbotProps) {
                                   >
                                     <InformationCircleIconOutline className='w-4 h-4 inline-block' />
                                   </IconButton>
-
-                                  <IconButton
-                                    isClean
-                                    ariaLabel='Search Icon'
-                                    onClick={() => {
-                                      setContentTypeModal1(type ?? '');
-                                      setContentModal1(content ?? '');
-                                      setIsOpenModal1(true);
-                                    }}
-                                    isDisabled={loading}
-                                  >
-                                    <PhotoIconOutline className='w-4 h-4 inline-block' />
-                                  </IconButton>
-
-
                                   <IconButton isDisabled={loading} isClean ariaLabel='Search Icon' onClick={() => copy(chat.message)}>
                                     <ClipboardDocumentIconOutline className='w-4 h-4 inline-block' />
                                   </IconButton>
@@ -476,11 +445,9 @@ export default function Chatbot(props: ChatbotProps) {
                   isFluid
                   onChange={handleInputChange}
                 />
-
                 <Button type='submit'>Submit</Button>
               </form>
             </div>
-
             <Modal
               modalProps={{
                 id: 'default-menu',
@@ -494,20 +461,6 @@ export default function Chatbot(props: ChatbotProps) {
                 entities={entitiesModal}
                 model={modelModal}
                 timeTaken={timeTaken}
-              />
-            </Modal>
-
-            <Modal
-              modalProps={{
-                id: 'default-menu',
-                className: 'n-p-token-4 n-bg-palette-neutral-bg-weak n-rounded-lg max-h-[90%] min-w-[60%]',
-              }}
-              onClose={handleCloseModal1}
-              isOpen={isOpenModal1}
-            >
-              <ContentInformation
-                type={contentTypeModal1}
-                content={contentModal1}
               />
             </Modal>
       </div>

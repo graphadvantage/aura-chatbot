@@ -115,10 +115,12 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
       runQuery(query1).then((result) => {
         result.nodes.map((record: any) => {
 
-          const label = record.labels.includes('Entity')
-            ? record.properties.text
+          const label = record.labels.includes('Chunk')
+            ? record.labels
             : record.labels.includes('Document')
             ? record.labels
+            : record.labels.includes('Entity')
+            ? record.properties.text
             : record.properties.type
 
 
