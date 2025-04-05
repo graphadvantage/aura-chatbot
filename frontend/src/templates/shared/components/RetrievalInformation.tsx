@@ -196,11 +196,13 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             <></>
           )}
           <InteractiveNvlWrapper
+            className='rounded-5xl overflow-hidden'
             ref={nvl}
             nodes={nodes}
             rels={rels}
             onClick={(evt) => console.log('custom click event', evt)}
             mouseEventCallbacks={mouseEventCallbacks}
+
             nvlOptions={{
               initialZoom: 0,
               layout: 'd3Force',
@@ -208,7 +210,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             }}
           />
           <Box className='max-w-[500px]'>
-            <Drawer isCloseable={true} isExpanded={isExpanded} position="left" type="overlay" onExpandedChange={() => {
+            <Drawer isCloseable={true} isExpanded={isExpanded} position="left" type="overlay" className="ml-[0px] rounded-5xl" onExpandedChange={() => {
               handleIsExpanded(false);
             }}>
 
@@ -230,9 +232,9 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
                   : (<Typography variant='h5'>Other</Typography>)}
                 </div>
               </Drawer.Header>
-              <Drawer.Body className='max-w-[500px]'>
+              <Drawer.Body className='max-w-[500px] pl-5'>
                   {expandedNode?.properties?.type === 'NarrativeText' && (
-                    <ReactMarkdown className='max-w-[250px]'>
+                    <ReactMarkdown className='max-w-[250px] object-top overflow-auto'>
                       {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
                     </ReactMarkdown>
                   )}
@@ -242,7 +244,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
                     expandedNode?.captions[0]?.labels?.includes('Entity')
                   ) && (
                     <div style={{ overflowWrap: 'break-word', width: '250px' }}>
-                    <ReactMarkdown className='max-w-[250px]'>
+                    <ReactMarkdown className='max-w-[250px] object-top overflow-auto'>
                       {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
                     </ReactMarkdown>
                     </div>
@@ -269,7 +271,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
                         '<caption class="caption-top"><br>text_as_html</caption><div class="border border-gray-400 border-collapse">'
                         + expandedNode?.properties?.text_as_html
                         + '</div>' }}
-                      className="w-full max-h-full"
+                      className='w-full max-h-full scrollbar-hide'
                     />
                   )}
               </Drawer.Body>
