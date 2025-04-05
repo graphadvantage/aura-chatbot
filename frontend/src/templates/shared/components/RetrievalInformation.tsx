@@ -210,7 +210,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             }}
           />
           <Box className='max-w-[500px]'>
-            <Drawer isCloseable={true} isExpanded={isExpanded} position="left" type="overlay" className="ml-[0px] rounded-5xl" onExpandedChange={() => {
+            <Drawer isCloseable={true} isExpanded={isExpanded} position="left" type="overlay" className="ml-[0px] rounded-tl-5xl rounded-bl-5xl" onExpandedChange={() => {
               handleIsExpanded(false);
             }}>
 
