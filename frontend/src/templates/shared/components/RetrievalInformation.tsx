@@ -22,6 +22,20 @@ type CypherProps = {
   password?: string;
 };
 
+type ExpandedNode = {
+  properties?: {
+    type?: string;
+    text?: string;
+    name?: string;
+    id?: string;
+    image_base64?: string;
+    text_as_html?: string;
+  };
+  captions?: {
+    labels?: string[];
+  }[];
+};
+
 function RetrievalInformation({ sources, model, entities, timeTaken }) {
 
   const nvl = useRef<NVL | null>(null);
@@ -232,66 +246,78 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
                   : (<Typography variant='h5'>Other</Typography>)}
                 </div>
               </Drawer.Header>
-              <Drawer.Body className='max-w-[500px] pl-5'>
-                  {expandedNode?.properties?.type === 'NarrativeText' && (
-                    <>
-                    <ReactMarkdown className='max-w-[250px] object-top overflow-auto'>
+              <Drawer.Body className="max-w-[500px] pl-5">
+                {/* NarrativeText Rendering */}
+                {expandedNode?.properties?.type === 'NarrativeText' && (
+                  <>
+                  <figcaption className="caption-top text-xs mb-2">narrative_text</figcaption>
+                  <ReactMarkdown className="max-w-[250px] object-top overflow-auto">
+                    {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
+                  </ReactMarkdown>
+                  </>
+                )}
+
+                {/* Document or Entity Labels */}
+                {(expandedNode?.captions?.[0]?.labels?.includes('Document') ||
+                  expandedNode?.captions?.[0]?.labels?.includes('Entity')) && (
+                  <>
+                  <figcaption className="caption-top text-xs mb-2">name</figcaption>
+                  <div style={{ overflowWrap: 'break-word', width: '250px' }}>
+                    <ReactMarkdown className="max-w-[250px] object-top overflow-auto">
                       {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
                     </ReactMarkdown>
-                    </>
-                  )}
+                  </div>
+                  </>
+                )}
 
-                  {(
-                    expandedNode?.captions[0]?.labels?.includes('Document') ||
-                    expandedNode?.captions[0]?.labels?.includes('Entity')
-                  ) && (
-                    <div style={{ overflowWrap: 'break-word', width: '250px' }}>
-                    <ReactMarkdown className='max-w-[250px] object-top overflow-auto'>
-                      {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
-                    </ReactMarkdown>
-                    </div>
-                  )}
-
-                  {expandedNode?.properties?.type === 'Image' && (
-                    <>
-                    <caption className="caption-top">image_base64</caption>
+                {/* Image Rendering */}
+                {expandedNode?.properties?.type === 'Image' && (
+                  <>
+                    <figcaption className="caption-top text-xs mb-2">image_base64</figcaption>
                     <img
-                      src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
+                      src={`data:image/png;base64,${expandedNode.properties.image_base64}`}
                       alt="Preview"
-                      className='max-w-full object-top overflow-auto'
+                      className="max-w-full object-top overflow-auto"
                     />
-                    </>
-                  )}
+                  </>
+                )}
 
-                  {(expandedNode?.properties?.type === 'Image' && expandedNode?.properties?.text) && (
-                    <>
-                      <caption className="caption-top"><br />ocr_text</caption>
-                      <ReactMarkdown>
-                        {expandedNode.properties.text}
-                      </ReactMarkdown>
-                    </>
-                  )}
+                {/* OCR Text for Image */}
+                {expandedNode?.properties?.type === 'Image' && expandedNode.properties?.text && (
+                  <>
+                    <figcaption className="caption-top text-xs mt-4 mb-2">ocr_text</figcaption>
+                    <ReactMarkdown className="max-w-[250px] object-top overflow-auto">
+                      {expandedNode.properties.text}
+                    </ReactMarkdown>
+                  </>
+                )}
 
-                  {expandedNode?.properties?.type === 'Table' && (
-                    <>
-                    <caption className="caption-top">image_base64</caption>
+                {/* Table Image */}
+                {expandedNode?.properties?.type === 'Table' && (
+                  <>
+                    <figcaption className="caption-top text-xs mb-2">image_base64</figcaption>
                     <img
-                      src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
-                      alt='Preview'
-                      className='max-w-full object-top overflow-auto'
+                      src={`data:image/png;base64,${expandedNode.properties.image_base64}`}
+                      alt="Preview"
+                      className="max-w-full object-top overflow-auto"
                     />
-                    </>
-                  )}
+                  </>
+                )}
 
-                  {expandedNode?.properties?.type === 'Table' && (
-                    <div
-                      dangerouslySetInnerHTML={{ __html:
-                        '<caption class="caption-top"><br>text_as_html</caption><div class="border border-gray-400 border-collapse">'
-                        + expandedNode?.properties?.text_as_html
-                        + '</div>' }}
-                      className='w-full max-h-full scrollbar-hide'
-                    />
-                  )}
+                {/* Table HTML Rendering */}
+                {expandedNode?.properties?.type === 'Table' && (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: `
+                        <div class="caption-top text-xs mt-4 mb-2">text_as_html</div>
+                        <div class="border border-gray-400 border-collapse">
+                          ${expandedNode.properties.text_as_html}
+                        </div>
+                      `,
+                    }}
+                    className="w-full max-h-full scrollbar-hide"
+                  />
+                )}
               </Drawer.Body>
             </Drawer>
           </Box>
