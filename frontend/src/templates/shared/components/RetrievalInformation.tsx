@@ -225,7 +225,16 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
                 ? (<Typography variant='h5'>Table: </Typography>)
                 : (<Typography variant='h5'>Other: </Typography>)}
 
-                {expandedNode?.properties?.type === 'NarrativeText' || expandedNode?.captions[0]?.labels?.includes('Entity','Document')  && (
+                {expandedNode?.properties?.type === 'NarrativeText' && (
+                  <ReactMarkdown>
+                    {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
+                  </ReactMarkdown>
+                )}
+
+                {(
+                  expandedNode?.captions[0]?.labels?.includes('Document') ||
+                  expandedNode?.captions[0]?.labels?.includes('Entity')
+                ) && (
                   <ReactMarkdown>
                     {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
                   </ReactMarkdown>
