@@ -207,62 +207,72 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
               relationshipThreshold: 1,
             }}
           />
-          <Box className='max-w-[300px]'>
+          <Box className='max-w-[500px]'>
             <Drawer isCloseable={true} isExpanded={isExpanded} position="left" type="overlay" onExpandedChange={() => {
               handleIsExpanded(false);
             }}>
-              <Drawer.Header>Node details</Drawer.Header>
-              <Drawer.Body className='max-w-[300px]'>
-                {expandedNode?.captions[0]?.labels?.includes('Chunk')
-                ? (<Typography variant='h5'>Text Chunk: </Typography>)
-                : expandedNode?.captions[0]?.labels?.includes('Document')
-                ? (<Typography variant='h5'>Document: </Typography>)
-                : expandedNode?.captions[0]?.labels?.includes('Entity')
-                ? (<Typography variant='h5'>Entity: </Typography>)
-                : expandedNode?.captions[0]?.labels?.includes('Image')
-                ? (<Typography variant='h5'>Image: </Typography>)
-                : expandedNode?.captions[0]?.labels?.includes('Table')
-                ? (<Typography variant='h5'>Table: </Typography>)
-                : (<Typography variant='h5'>Other: </Typography>)}
 
-                {expandedNode?.properties?.type === 'NarrativeText' && (
-                  <ReactMarkdown>
-                    {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
-                  </ReactMarkdown>
-                )}
+              <Drawer.Header>
+                <div>
+                  <Typography variant='mb-2' variant='body-medium'>Node Details</Typography>
+                </div>
+                <div>
+                  {expandedNode?.captions[0]?.labels?.includes('Chunk')
+                  ? (<Typography variant='h5'>Text Chunk</Typography>)
+                  : expandedNode?.captions[0]?.labels?.includes('Document')
+                  ? (<Typography variant='h5'>Document</Typography>)
+                  : expandedNode?.captions[0]?.labels?.includes('Entity')
+                  ? (<Typography variant='h5'>Entity</Typography>)
+                  : expandedNode?.captions[0]?.labels?.includes('Image')
+                  ? (<Typography variant='h5'>Image</Typography>)
+                  : expandedNode?.captions[0]?.labels?.includes('Table')
+                  ? (<Typography variant='h5'>Table</Typography>)
+                  : (<Typography variant='h5'>Other</Typography>)}
+                </div>
+              </Drawer.Header>
+              <Drawer.Body className='max-w-[500px]'>
+                  {expandedNode?.properties?.type === 'NarrativeText' && (
+                    <ReactMarkdown className='max-w-[250px]'>
+                      {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
+                    </ReactMarkdown>
+                  )}
 
-                {(
-                  expandedNode?.captions[0]?.labels?.includes('Document') ||
-                  expandedNode?.captions[0]?.labels?.includes('Entity')
-                ) && (
-                  <ReactMarkdown>
-                    {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
-                  </ReactMarkdown>
-                )}
+                  {(
+                    expandedNode?.captions[0]?.labels?.includes('Document') ||
+                    expandedNode?.captions[0]?.labels?.includes('Entity')
+                  ) && (
+                    <div style={{ overflowWrap: 'break-word', width: '250px' }}>
+                    <ReactMarkdown className='max-w-[250px]'>
+                      {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
+                    </ReactMarkdown>
+                    </div>
+                  )}
+                  {expandedNode?.properties?.type === 'Image' && (
+                    <img
+                      src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
+                      alt="Preview"
+                      className='max-w-full object-top overflow-auto'
+                    />
+                  )}
 
-                {expandedNode?.properties?.type === 'Image' && (
-                  <img
-                    src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
-                    alt="Preview"
-                    className="w-full max-h-full object-top object-cover"
-                  />
-                )}
+                  {expandedNode?.properties?.type === 'Table' && (
+                    <img
+                      src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
+                      alt='Preview'
+                      className='max-w-full object-top overflow-auto'
+                    />
+                  )}
 
-                {expandedNode?.properties?.type === 'Table' && (
-                  <img
-                    src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
-                    alt="Preview"
-                    className="w-full max-h-full object-top object-cover"
-                  />
-                )}
-
-                {expandedNode?.properties?.type === 'Table' && (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: expandedNode?.properties?.text_as_html }}
-                    className="w-full max-h-full overflow-auto"
-                  />
-                )}
-           </Drawer.Body>
+                  {expandedNode?.properties?.type === 'Table' && (
+                    <div
+                      dangerouslySetInnerHTML={{ __html:
+                        '<caption class="caption-top"><br>text_as_html</caption><div class="border border-gray-400 border-collapse">'
+                        + expandedNode?.properties?.text_as_html
+                        + '</div>' }}
+                      className="w-full max-h-full"
+                    />
+                  )}
+              </Drawer.Body>
             </Drawer>
           </Box>
         </div>
