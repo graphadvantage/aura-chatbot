@@ -210,7 +210,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             }}
           />
           <Box className='max-w-[500px]'>
-            <Drawer isCloseable={true} isExpanded={isExpanded} position="left" type="overlay" className="ml-[0px] rounded-tl-5xl rounded-bl-5xl" onExpandedChange={() => {
+            <Drawer isCloseable={true} isExpanded={isExpanded} position="left" type="overlay" className="rounded-tl-5xl rounded-bl-5xl" onExpandedChange={() => {
               handleIsExpanded(false);
             }}>
 
@@ -234,9 +234,11 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
               </Drawer.Header>
               <Drawer.Body className='max-w-[500px] pl-5'>
                   {expandedNode?.properties?.type === 'NarrativeText' && (
+                    <>
                     <ReactMarkdown className='max-w-[250px] object-top overflow-auto'>
                       {expandedNode.properties.text ?? expandedNode.properties.name ?? expandedNode.properties.id}
                     </ReactMarkdown>
+                    </>
                   )}
 
                   {(
@@ -249,20 +251,36 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
                     </ReactMarkdown>
                     </div>
                   )}
+
                   {expandedNode?.properties?.type === 'Image' && (
+                    <>
+                    <caption className="caption-top">image_base64</caption>
                     <img
                       src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
                       alt="Preview"
                       className='max-w-full object-top overflow-auto'
                     />
+                    </>
+                  )}
+
+                  {(expandedNode?.properties?.type === 'Image' && expandedNode?.properties?.text) && (
+                    <>
+                      <caption className="caption-top"><br />ocr_text</caption>
+                      <ReactMarkdown>
+                        {expandedNode.properties.text}
+                      </ReactMarkdown>
+                    </>
                   )}
 
                   {expandedNode?.properties?.type === 'Table' && (
+                    <>
+                    <caption className="caption-top">image_base64</caption>
                     <img
                       src={`data:image/png;base64,${expandedNode?.properties?.image_base64}`}
                       alt='Preview'
                       className='max-w-full object-top overflow-auto'
                     />
+                    </>
                   )}
 
                   {expandedNode?.properties?.type === 'Table' && (
