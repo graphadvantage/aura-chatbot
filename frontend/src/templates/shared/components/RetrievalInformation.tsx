@@ -95,12 +95,14 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     const query1 = `
     MATCH (a:Chunk)-[r:PART_OF_DOCUMENT]->(d:Document)
     WHERE elementId(a) in [${formattedSources}]
-    MATCH (b:Entity)<-[r2:HAS_ENTITY]-(a)
+    MATCH (b:Entity)<-[r1:HAS_ENTITY]-(a)
     WHERE elementId(b) in [${formattedSources}]
-    MATCH (a)-[r3:NEXT_CHUNK]-(c)
+    MATCH (a)-[r2:NEXT_CHUNK]-(c)
     WHERE elementId(a) in [${formattedSources}] AND elementId(c) in [${formattedSources}]
-    MATCH (d)-[r4:PART_OF_DOCUMENT]-(e:Image|Table)-[r5:HAS_ENTITY]->(b)
-    RETURN DISTINCT a,b,c,d,e,r,r2,r3,r4,r5 LIMIT 250
+    //OPTIONAL MATCH (a)-[r3:RELATED_CONTENT]->(e)
+    //WHERE e.is_logo IS NULL
+    RETURN a,d,b,c,r,r1,r2
+    LIMIT 250
     `;
 
     const query2 = `
@@ -113,11 +115,10 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
 
     setDriver(uri, username, password).then((isSuccessful) => {
       runQuery(query1).then((result) => {
+
         result.nodes.map((record: any) => {
 
-          const label = record.labels.includes('Chunk')
-            ? record.labels
-            : record.labels.includes('Document')
+          const label = record.labels.includes('Document')
             ? record.labels
             : record.labels.includes('Entity')
             ? record.properties.text
