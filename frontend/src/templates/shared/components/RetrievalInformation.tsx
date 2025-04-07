@@ -93,24 +93,34 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     const formattedSources = sources.map((source) => `"${source}"`).join(',');
 
     const query1 = `
-    MATCH (a:Chunk)-[r:PART_OF_DOCUMENT]->(d:Document)
+    MATCH (a:Chunk)-[r:PART_OF_DOCUMENT]->(b:Document)
     WHERE elementId(a) in [${formattedSources}]
-    MATCH (b:Entity)<-[r1:HAS_ENTITY]-(a)
-    WHERE elementId(b) in [${formattedSources}]
-    MATCH (a)-[r2:NEXT_CHUNK]-(c)
-    WHERE elementId(a) in [${formattedSources}] AND elementId(c) in [${formattedSources}]
-    //OPTIONAL MATCH (a)-[r3:RELATED_CONTENT]->(e)
-    //WHERE e.is_logo IS NULL
-    RETURN a,d,b,c,r,r1,r2
-    LIMIT 250
+    RETURN DISTINCT a,r,b
+    UNION
+    MATCH (a:Chunk)-[r:HAS_ENTITY]-(b:Entity)
+    WHERE elementId(a) in [${formattedSources}] AND elementId(b) in [${formattedSources}]
+    RETURN DISTINCT a,r,b
+    UNION
+    MATCH (a:Chunk)-[r:NEXT_CHUNK]-(b:Chunk)
+    WHERE elementId(a) in [${formattedSources}] AND elementId(b) in [${formattedSources}]
+    RETURN DISTINCT a,r,b
+    UNION
+    MATCH (a:NarrativeText)-[:NEXT_CHUNK *1..6]-(b:Image|Table)
+    WHERE elementId(a) in [${formattedSources}] AND b.is_logo IS NULL
+    WITH DISTINCT a,b
+    CALL apoc.create.vRelationship(a,'RELATED_CONTENT',{},b) YIELD rel AS r
+    RETURN DISTINCT a,r,b
+    LIMIT 500
     `;
 
     const query2 = `
-    MATCH (a:Chunk)-[r2:PART_OF]-(d:Document)
+    MATCH (a:Chunk)-[r:PART_OF]-(b:Document)
     WHERE elementId(a) in [${formattedSources}]
+    RETURN DISTINCT a,r,b
+    UNION
     MATCH (a)-[r]-(b)
     WHERE elementId(b) IN [${formattedSources}]
-    RETURN a,b,r,r2,d LIMIT 100
+    RETURN a,r,b LIMIT 100
     `;
 
     setDriver(uri, username, password).then((isSuccessful) => {

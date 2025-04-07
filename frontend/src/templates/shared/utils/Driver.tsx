@@ -50,27 +50,6 @@ export async function runQuery(query: string) {
         properties: nodeEnd.properties,
       });
 
-      const nodeNext = record.get('c');
-      nodes.push({
-        id: nodeNext.identity.low,
-        labels: nodeNext.labels,
-        properties: nodeNext.properties,
-      });
-
-      const nodeDoc = record.get('d');
-      nodes.push({
-        id: nodeDoc.identity.low,
-        labels: nodeDoc.labels,
-        properties: nodeDoc.properties,
-      });
-/*
-      const nodeImgTbl = record.get('e');
-      nodes.push({
-        id: nodeImgTbl.identity.low,
-        labels: nodeImgTbl.labels,
-        properties: nodeImgTbl.properties,
-      });
-*/
       const rel = record.get('r');
       rels.push({
         id: rel.elementId,
@@ -80,51 +59,6 @@ export async function runQuery(query: string) {
         properties: rel.properties,
       });
 
-      const rel1 = record.get('r1');
-      rels.push({
-        id: rel1.elementId,
-        start: rel1.start.low,
-        end: rel1.end.low,
-        type: rel1.type,
-        properties: rel1.properties,
-      });
-
-      const rel2 = record.get('r2');
-      rels.push({
-        id: rel2.elementId,
-        start: rel2.start.low,
-        end: rel2.end.low,
-        type: rel2.type,
-        properties: rel2.properties,
-      });
-/*
-      const rel3 = record.get('r3');
-      rels.push({
-        id: rel3.elementId,
-        start: rel3.start.low,
-        end: rel3.end.low,
-        type: rel3.type,
-        properties: rel3.properties,
-      });
-
-      const rel4 = record.get('r4');
-      rels.push({
-        id: rel4.elementId,
-        start: rel4.start.low,
-        end: rel4.end.low,
-        type: rel4.type,
-        properties: rel4.properties,
-      });
-
-      const rel5 = record.get('r5');
-      rels.push({
-        id: rel5.elementId,
-        start: rel5.start.low,
-        end: rel5.end.low,
-        type: rel5.type,
-        properties: rel5.properties,
-      });
-*/
     }
     //console.log(rels);
     return { nodes: nodes, rels: rels };
@@ -133,32 +67,3 @@ export async function runQuery(query: string) {
     return [];
   }
 }
-
-/*
-  Everything below this line is only for providing examples based on datasets available in Neo4j Sandbox (sandbox.neo4j.com).
-  When using this code in your own project, you should remove the examples below and use your own queries.
-
-export async function runRecoQuery(query: string) {
-  const reco = [];
-  try {
-    let { records } = await driver.executeQuery(query);
-    for (let record of records) {
-      reco.push({
-        id: record.get('id'),
-        genres: record.get('genres'),
-        year: record.get('year'),
-        imdbRating: record.get('imdbRating'),
-        languages: record.get('languages'),
-        title: record.get('title'),
-        plot: record.get('plot'),
-        poster: record.get('poster'),
-      });
-    }
-
-    return reco;
-  } catch (err) {
-    console.error(`Disconnection error\n${err}\nCause: ${err as Error}`);
-    return false;
-  }
-}
-*/
