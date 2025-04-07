@@ -105,7 +105,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     WHERE elementId(a) in [${formattedSources}] AND elementId(b) in [${formattedSources}]
     RETURN DISTINCT a,r,b
     UNION
-    MATCH (a:NarrativeText)-[:NEXT_CHUNK *1..6]-(b:Image|Table)
+    MATCH (a:NarrativeText)-[:NEXT_CHUNK *1..7]-(b:Image|Table)
     WHERE elementId(a) in [${formattedSources}] AND b.is_logo IS NULL
     WITH DISTINCT a,b
     CALL apoc.create.vRelationship(a,'RELATED_CONTENT',{},b) YIELD rel AS r
