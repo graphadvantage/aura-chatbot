@@ -323,12 +323,12 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
                     dangerouslySetInnerHTML={{
                       __html: `
                         <div class="caption-top text-xs mt-4 mb-2">text_as_html</div>
-                        <div class="border border-gray-400 border-collapse">
+                        <div>
                           ${expandedNode.properties.text_as_html}
                         </div>
                       `,
                     }}
-                    className="w-full max-h-full scrollbar-hide"
+                    className="max-w-full object-top overflow-auto"
                   />
                 )}
               </Drawer.Body>
