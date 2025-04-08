@@ -21,7 +21,7 @@ class Retriever:
             """
             with node, score OPTIONAL MATCH (node)-[:NEXT_CHUNK|HAS_ENTITY]-(e:!Image&!Table)
             return collect(elementId(node))+collect(elementId(e)) as listIds,
-            collect(e.id) as contextNodes, node.text as nodeText, score
+            collect(e.id) as contextNodes, node.text as nodeText, score ORDER BY score DESC LIMIT 100
             """
         )
 
