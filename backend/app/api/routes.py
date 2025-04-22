@@ -1,5 +1,6 @@
 from fastapi import HTTPException, Request
 from app.api.question import Question
+import re
 
 class Routes:
 
@@ -24,8 +25,8 @@ class Routes:
                 history.add_message({"role": "user", "content": input})
 
                 response = self._rag.search(
-                    query_text=input,
-                    retriever_config={"top_k": 6, "effective_search_ratio": 1.0},
+                    query_text= input,
+                    retriever_config={"top_k": 5, "effective_search_ratio": 1.0},
                     return_context=True,
                     message_history=history
                 )

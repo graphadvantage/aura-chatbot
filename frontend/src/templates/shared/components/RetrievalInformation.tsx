@@ -46,10 +46,19 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
   const [isExpanded, handleIsExpanded] = useState(false);
   const [expandedNode, setExpandedNode] = useState(null);
 
-  const handleExpand = (nodes, hitTargets, evt) => {
-    setExpandedNode(nodes);
+  const handleExpand = (clickedNode) => {
+    setExpandedNode(clickedNode);
     handleIsExpanded(true);
-  }
+
+    setNodes((prevNodes) =>
+      prevNodes.map((node) =>
+        ({
+          ...node,
+          selected: node.id === clickedNode.id
+        })
+      )
+    );
+  };
 
   useEffect(() => {
     run();
@@ -97,18 +106,16 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     WHERE elementId(a) in [${formattedSources}]
     RETURN DISTINCT a,r,b
     UNION
-    MATCH (a:Chunk)-[r:HAS_ENTITY]-(b:Entity)
-    WHERE elementId(a) in [${formattedSources}] AND elementId(b) in [${formattedSources}]
-    RETURN DISTINCT a,r,b
-    UNION
     MATCH (a:Chunk)-[r:NEXT_CHUNK]-(b:Chunk)
     WHERE elementId(a) in [${formattedSources}] AND elementId(b) in [${formattedSources}]
     RETURN DISTINCT a,r,b
     UNION
-    MATCH (a:NarrativeText)-[:NEXT_CHUNK *1..7]-(b:Image|Table)
-    WHERE elementId(a) in [${formattedSources}] AND b.is_logo IS NULL
-    WITH DISTINCT a,b
-    CALL apoc.create.vRelationship(a,'RELATED_CONTENT',{},b) YIELD rel AS r
+    MATCH (a:Chunk)-[r:HAS_ENTITY]-(b:Entity)
+    WHERE elementId(a) in [${formattedSources}] AND elementId(b) in [${formattedSources}]
+    RETURN DISTINCT a,r,b
+    UNION
+    MATCH (a:Chunk)-[r:RELATED_CONTENT]-(b:Image|Table)
+    WHERE elementId(a) in [${formattedSources}] AND b.aspect_ratio < 10 AND b.bytes > 1024 * 9
     RETURN DISTINCT a,r,b
     LIMIT 500
     `;
@@ -234,6 +241,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
               initialZoom: 0,
               layout: 'd3Force',
               relationshipThreshold: 1,
+              selectedBorderColor: '#F5F5F5',
             }}
           />
           <Box className='max-w-[500px]'>

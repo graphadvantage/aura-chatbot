@@ -19,9 +19,12 @@ class Retriever:
 #this query pulls the adjacent Chunks, Entities
     RETRIEVAL_QUERY = (
             """
-            with node, score OPTIONAL MATCH (node)-[:NEXT_CHUNK|HAS_ENTITY]-(e:!Image&!Table)
-            return collect(elementId(node))+collect(elementId(e)) as listIds,
-            collect(e.id) as contextNodes, node.text as nodeText, score ORDER BY score DESC LIMIT 100
+            WITH node, score
+            OPTIONAL MATCH (node)-[:NEXT_CHUNK]-(c) // get chunk neighbors
+            OPTIONAL MATCH (node)<-[HAS_ENTITY]-(e) // get entity context chunks
+            ORDER BY score DESC LIMIT 100
+            RETURN apoc.convert.toSet(COLLECT(elementId(node))+COLLECT(elementId(e))+COLLECT(elementId(c))) AS listIds,
+            COLLECT (e.id) as contextNodes, node.text as nodeText, score ORDER BY score DESC
             """
         )
 
