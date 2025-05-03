@@ -114,7 +114,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
     WHERE elementId(a) in [${formattedSources}] AND elementId(b) in [${formattedSources}]
     RETURN DISTINCT a,r,b
     UNION
-    MATCH (a:Chunk)-[r:RELATED_CONTENT]-(b:Image|Table)
+    MATCH (a:Chunk)-[r:RELATED_CONTENT]->(b:Image|Table)
     WHERE elementId(a) in [${formattedSources}] AND b.aspect_ratio < 10 AND b.bytes > 1024 * 9
     RETURN DISTINCT a,r,b
     LIMIT 500
@@ -194,7 +194,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             margin: 10,
             borderRadius: 25,
             border: '2px solid #2AADA5',
-            height: 650,
+            height: 600,
             background: `rgb(var(--theme-palette-primary-bg-weaker));`,
             boxShadow: `2px -2px 10px grey`,
             position: 'relative',

@@ -21,7 +21,25 @@ class Routes:
 
                 history, _, current_session_id = self._message_history.create_history(session_id=question.session_id)
 
-                input = question.question
+                #input = question.question
+
+                def sanitize_for_lucene(query: str) -> str:
+                    # Remove newline and control characters
+                    query = query.replace('\n', ' ').replace('\r', ' ')
+                    # Escape Lucene special characters
+                    # List: + - && || ! ( ) { } [ ] ^ " ~ * ? : \ /
+                    lucene_specials = r'([\+\-\!\(\)\{\}\[\]\^\"\~\*\?\:\\\/])'
+                    query = re.sub(lucene_specials, r'\\\1', query)
+                    # Remove field queries if you're not using them (e.g., title:hello)
+                    query = re.sub(r'\b\w+:(?=\S)', '', query)
+                    # Collapse multiple spaces
+                    query = re.sub(r'\s+', ' ', query).strip()
+                    return query
+
+                input = sanitize_for_lucene(question.question)
+
+                print(input)
+
                 history.add_message({"role": "user", "content": input})
 
                 response = self._rag.search(
