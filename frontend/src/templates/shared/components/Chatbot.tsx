@@ -15,8 +15,10 @@ import {
   ClipboardDocumentIconOutline,
   ArrowPathIconOutline,
   SpeakerWaveIconOutline,
-  InformationCircleIconOutline,
+  InformationCircleIconOutline
 } from '@neo4j-ndl/react/icons';
+
+import { PiGraphBold } from "react-icons/pi";
 
 import { useCopyToClipboard } from '@neo4j-ndl/react';
 
@@ -350,7 +352,7 @@ export default function Chatbot(props: ChatbotProps) {
                                   <IconButton
                                     isClean
                                     isDisabled={loadingPlaying || loading}
-                                    ariaLabel='Search Icon'
+                                    ariaLabel='Speaker Icon'
                                     onClick={() => {
                                       setLoadingPlaying(true);
                                       chatBotVoice(chat.message).then((url) => {
@@ -363,7 +365,7 @@ export default function Chatbot(props: ChatbotProps) {
                                   </IconButton>
                                   <IconButton
                                     isClean
-                                    ariaLabel='Search Icon'
+                                    ariaLabel='Information Icon'
                                     onClick={() => {
                                       setEntitiesModal(chat.entities ?? []);
                                       setModelModal(chat.model ?? '');
@@ -373,12 +375,13 @@ export default function Chatbot(props: ChatbotProps) {
                                     }}
                                     isDisabled={loading}
                                   >
-                                    <InformationCircleIconOutline className='w-4 h-4 inline-block' />
+                                    <PiGraphBold className='w-4 h-4 inline-block' />
                                   </IconButton>
-                                  <IconButton isDisabled={loading} isClean ariaLabel='Search Icon' onClick={() => copy(chat.message)}>
+                                  <IconButton isDisabled={loading} isClean ariaLabel='Copy Icon' onClick={() => copy(chat.message)}>
                                     <ClipboardDocumentIconOutline className='w-4 h-4 inline-block' />
                                   </IconButton>
-                                  <IconButton isDisabled={loading} isClean ariaLabel='Search Icon'>
+                                  {/*
+                                  </IconButton isDisabled={loading} isClean ariaLabel='Refresh Icon'>
                                     <ArrowPathIconOutline
                                       className='w-4 h-4 inline-block'
                                       onClick={async () => {
@@ -404,6 +407,7 @@ export default function Chatbot(props: ChatbotProps) {
                                       }}
                                     />
                                   </IconButton>
+                                  */}
                                 </>
                               ) : (
                                 <>
