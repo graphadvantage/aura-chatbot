@@ -66,24 +66,19 @@ pip install python-dotenv fastapi[standard] uvicorn openai unstructured_client u
 ```
 
 - get an OpenAi API key https://openai.com/
-
 - get an Unstructured API key https://unstructured.io/
-
 - create a Neo4j Aura graph database: https://neo4j.com/product/auradb/  and download connection credentials
 
 from /graph-build
 
 - add and configure .env file, following the .env.example template
-
 - add pdf files to /document directory
-
 - open and run the jupyter notebook
 
 ### start the back end
 from /backend
 
 - add and configure .env file, following the .env.example template
-
 - `uvicorn app.main:app --reload`
 
 
@@ -91,7 +86,5 @@ from /backend
 from /frontend
 
 - add and configure .env file, following the .env.example template
-
-`yarn install`
-
-`sudo yarn run dev`
+- `yarn install`
+- `sudo yarn run dev`
