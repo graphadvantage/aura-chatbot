@@ -59,34 +59,38 @@ Click on any node to explore the text chunks, images, tables, etc.
 Neo4j and Unstructured.io can be used together to build highly accurate, fully explainable GenAI experiences that include text, images, tables extracted in document context. The underlying knowledge graph can be further extended to include operational or other data for even more comprehensive results.
 
 ### build the graph
-Install python dependencies:
+- install python dependencies:
 
 ```
 pip install python-dotenv fastapi[standard] uvicorn openai unstructured_client unstructured_ingest neo4j neo4j-driver neo4j_graphrag neo4j_graphrag[openai]
 ```
 
-get an OpenAi API key https://openai.com/
+- get an OpenAi API key https://openai.com/
 
-get an Unstructured API key https://unstructured.io/
+- get an Unstructured API key https://unstructured.io/
 
-create a Neo4j Aura graph database: https://neo4j.com/product/auradb/  and download connection credentials
+- create a Neo4j Aura graph database: https://neo4j.com/product/auradb/  and download connection credentials
 
-add and configure .env file, following the .env.example template
+from /graph-build
 
-open and run the jupyter notebook
+- add and configure .env file, following the .env.example template
+
+- add pdf files to /document directory
+
+- open and run the jupyter notebook
 
 ### start the back end
 from /backend
 
-add and configure .env file, following the .env.example template
+- add and configure .env file, following the .env.example template
 
-`uvicorn app.main:app --reload`
+- `uvicorn app.main:app --reload`
 
 
 ### start the front end
 from /frontend
 
-add and configure .env file, following the .env.example template
+- add and configure .env file, following the .env.example template
 
 `yarn install`
 
