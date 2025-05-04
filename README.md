@@ -71,6 +71,8 @@ get an Unstructured API key https://unstructured.io/
 
 create a Neo4j Aura graph database: https://neo4j.com/product/auradb/  and download connection credentials
 
+add and configure .env file, following the .env.example template
+
 open and run the jupyter notebook
 
 ### start the back end
