@@ -18,7 +18,7 @@ Any group of documents can be ingested with some minor adjustments to the ingest
 
 ### overview
 
-Key challenges in GenAI being able to supply accurate explainable results to end users, particularly technical audiences who demand specificity and completeness - these users want to see not only a text summary, but related images and tables in document context as well.
+Knowledge graphs and GraphRAG provide accuracy and explainability for GenAI experiences. Technical audiences require an even greater level of specificity and completeness -- these users want to see not only a text summary, but the related images and tables in document context.
 
 Unstructured.io is used to perform detailed parsing of documents from the open-source [Volve Field repository](https://www.equinor.com/energy/volve-data-sharing), including image and table extraction and write these to a Neo4j knowledge graph.
 
