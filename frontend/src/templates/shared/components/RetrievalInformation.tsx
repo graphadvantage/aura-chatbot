@@ -175,7 +175,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
   }
 
   return (
-    <Box className='n-bg-palette-neutral-bg-weak p-4'>
+    <Box className='n-bg-palette-neutral-bg-weak p-4' style={{height: '80vh'}}>
       <Flex flexDirection='row' className='flex flex-row p-6 items-center'>
         <img src={retrievalIllustration} alt='icon' style={{ width: 95, height: 95, marginRight: 10 }} />
         <Box className='flex flex-col'>
@@ -188,16 +188,20 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
           </Typography>
         </Box>
       </Flex>
-      <Box className='button-container' sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+      <Box className='button-container' sx={{ display: 'flex', justifyContent: 'space-between', mt: 2}}>
         <div
           style={{
             margin: 10,
             borderRadius: 25,
             border: '2px solid #2AADA5',
-            height: 600,
+            height: 'calc(80vh - 163px)',
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
             background: `rgb(var(--theme-palette-primary-bg-weaker));`,
             boxShadow: `2px -2px 10px grey`,
             position: 'relative',
+            overflow: 'hidden',
           }}
         >
           <Flex
@@ -236,7 +240,7 @@ function RetrievalInformation({ sources, model, entities, timeTaken }) {
             rels={rels}
             onClick={(evt) => console.log('custom click event', evt)}
             mouseEventCallbacks={mouseEventCallbacks}
-
+            style={{ flexGrow: 1 }}
             nvlOptions={{
               initialZoom: 0,
               layout: 'd3Force',
