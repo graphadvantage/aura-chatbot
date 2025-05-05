@@ -18,7 +18,7 @@ Any group of documents can be ingested with some minor adjustments to the ingest
 
 ### overview
 
-A key challenge in GenAI is providing accurate, comprehensive and explainable responses for demanding technical audiences who want to see not just text -- but related tables, images and diagrams as well.
+Key challenges in GenAI being able to supply accurate explainable results to end users, particularly technical audiences who demand specificity and completeness - these users want to see not only a text summary, but related images and tables in document context as well.
 
 Unstructured.io is used to perform detailed parsing of documents from the open-source [Volve Field repository](https://www.equinor.com/energy/volve-data-sharing), including image and table extraction and write these to a Neo4j knowledge graph.
 
@@ -45,7 +45,7 @@ Now we can see the result: an accurate, contextual summary for a technical quest
 
 ![screenshots/response.png](screenshots/response.png)
 
-Clicking on the graph icon, you challenge explore the top-k `:Chunk` and `:Entity` nodes as well as the traversal discovered neighbor nodes that were used for additional response context.
+Clicking on the graph icon, you can explore the top-k `:Chunk` and `:Entity` nodes, as well as the traversal discovered neighbor nodes that were used for additional response context.
 
 ![screenshots/hybrid-retrieval.png](screenshots/hybrid-retriever.png)
 
