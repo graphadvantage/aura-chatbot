@@ -72,8 +72,12 @@ pip install python-dotenv fastapi[standard] uvicorn openai unstructured_client u
 from /graph-build
 
 - add and configure .env file, following the .env.example template
-- add pdf files to /document directory
+- add pdf files to /document directory  (Volve Field [example pdfs](https://drive.google.com/file/d/1nzkhww8Vqp6RYOqt8ZbDqFslxUzCrlHV/view?usp=drive_link))
 - open and run the jupyter notebook
+
+### import the graph
+
+Alternatively, you can skip the build and import the Neo4j 5.24.5 [dump file](https://drive.google.com/file/d/1nzkhww8Vqp6RYOqt8ZbDqFslxUzCrlHV/view?usp=drive_link) into your Neo4j database.
 
 ### start the back end
 from /backend
