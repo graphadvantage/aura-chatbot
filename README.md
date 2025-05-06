@@ -72,7 +72,7 @@ pip install python-dotenv fastapi[standard] uvicorn openai unstructured_client u
 from /graph-build
 
 - add and configure .env file, following the .env.example template
-- add pdf files to /document directory  (Volve Field [example pdfs](https://drive.google.com/file/d/1nzkhww8Vqp6RYOqt8ZbDqFslxUzCrlHV/view?usp=drive_link))
+- add pdf files to /document directory  (Volve Field [example pdfs](https://drive.google.com/drive/folders/1qv96l-M62Q9bccLNWYv6oOpJRxKTIPAv?usp=drive_link))
 - open and run the jupyter notebook
 
 ### import the graph
