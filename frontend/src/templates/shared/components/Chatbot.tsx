@@ -15,10 +15,12 @@ import {
   ClipboardDocumentIconOutline,
   ArrowPathIconOutline,
   SpeakerWaveIconOutline,
-  InformationCircleIconOutline
+  InformationCircleIconOutline,
 } from '@neo4j-ndl/react/icons';
 
 import { PiGraphBold } from "react-icons/pi";
+
+import { HiOutlineThumbDown, HiOutlineThumbUp } from "react-icons/hi";
 
 import { useCopyToClipboard } from '@neo4j-ndl/react';
 
@@ -32,13 +34,9 @@ import remarkGfm from 'remark-gfm';
 
 import axios from 'axios';
 
+import { setDriver, runQuery } from '../utils/Driver';
+
 import RetrievalInformation from './RetrievalInformation';
-
-///  IMAGES AND TABLES ///
-import ContentInformation from './ContentInformation';
-
-import {contentImg} from './test-image';
-import {contentTbl} from './test-table';
 
 import Header from './Header';
 
@@ -99,8 +97,8 @@ export default function Chatbot(props: ChatbotProps) {
   const [inputMessage, setInputMessage] = useState('');
   const formattedTextStyle = { color: 'rgb(var(--theme-palette-discovery-bg-strong))' };
   const [loading, setLoading] = useState<boolean>(false);
-  const [negativeFeedback, setNegativefeedback] = useState<boolean>(false);
-  const [negativeFeedbackMessage, setNegativefeedbackMessage] = useState<string>('');
+  //const [negativeFeedback, setNegativefeedback] = useState<boolean>(false);
+  //const [negativeFeedbackMessage, setNegativefeedbackMessage] = useState<string>('');
   const [loadingFeedback, setLoadingFeedback] = useState<boolean>(false);
   const [audioUrl, setAudioUrl] = useState<AudioInfo[]>([]);
   const [sessionId, setSessionId] = useState<string>(uuidv4());
@@ -112,6 +110,7 @@ export default function Chatbot(props: ChatbotProps) {
   const [modelModal, setModelModal] = useState<string>('');
   const [timeTaken, setTimeTaken] = useState<number>(0);
   const [value, copy] = useCopyToClipboard();
+  //const [handleFeedback, setHandlefeedback] = useState<boolean>(false);
 
   const [activeNavItem, setActiveNavItem] = useState<string>('Chatbot');
 
@@ -259,11 +258,13 @@ export default function Chatbot(props: ChatbotProps) {
     const audio = new Audio(id);
     audio.play().catch((error) => console.error('Error playing the audio:', error));
   }
+
+/*
   const handleNegativeFeedback = (target) => {
     setNegativefeedbackMessage(target);
     setNegativefeedback(true);
   };
-
+*/
   useEffect(() => {
     const initialMessage = {
       id: 1,
@@ -277,6 +278,25 @@ export default function Chatbot(props: ChatbotProps) {
     setListMessages([initialMessage]);
     simulateTypingEffect({ reply: initialMessage.message });
   }, []);
+
+  const submitFeedback = async (sessionId: string, feedback: string) => {
+    console.log('Submitting feedback for sessionId:', sessionId);
+    const updateMessage = `
+      MATCH (a:Session {id: '${sessionId}'})-[r:LAST_MESSAGE]->(b)
+      SET b.feedback = '${feedback}'
+      RETURN a,r,b
+    `;
+
+    const isSuccessful = await setDriver(
+      import.meta.env.VITE_NEO4J_URI,
+      import.meta.env.VITE_NEO4J_USERNAME,
+      import.meta.env.VITE_NEO4J_PASSWORD
+    );
+    if (isSuccessful) {
+      runQuery(updateMessage, { sessionId, feedback });
+    }
+  };
+
 
   return (
     <>
@@ -379,6 +399,12 @@ export default function Chatbot(props: ChatbotProps) {
                                   </IconButton>
                                   <IconButton isDisabled={loading} isClean ariaLabel='Copy Icon' onClick={() => copy(chat.message)}>
                                     <ClipboardDocumentIconOutline className='w-4 h-4 inline-block' />
+                                  </IconButton>
+                                  <IconButton isDisabled={loading} isClean ariaLabel='Thumbs Up Icon' onClick={() =>  { submitFeedback(sessionId, 'good'); console.log(sessionId);}}>
+                                    <HiOutlineThumbUp className='w-4 h-4 inline-block' />
+                                  </IconButton>
+                                  <IconButton isDisabled={loading} isClean ariaLabel='Thumbs Down Icon' onClick={() => { submitFeedback(sessionId, 'poor'); console.log(sessionId);}}>
+                                    <HiOutlineThumbDown className='w-4 h-4 inline-block'/>
                                   </IconButton>
                                   {/*
                                   </IconButton isDisabled={loading} isClean ariaLabel='Refresh Icon'>
