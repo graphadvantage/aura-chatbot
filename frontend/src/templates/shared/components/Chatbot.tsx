@@ -110,7 +110,6 @@ export default function Chatbot(props: ChatbotProps) {
   const [modelModal, setModelModal] = useState<string>('');
   const [timeTaken, setTimeTaken] = useState<number>(0);
   const [value, copy] = useCopyToClipboard();
-  //const [handleFeedback, setHandlefeedback] = useState<boolean>(false);
 
   const [activeNavItem, setActiveNavItem] = useState<string>('Chatbot');
 
@@ -381,7 +380,7 @@ export default function Chatbot(props: ChatbotProps) {
                                       });
                                     }}
                                   >
-                                    <SpeakerWaveIconOutline className='w-4 h-4 inline-block' />
+                                    <SpeakerWaveIconOutline style={{ color: 'yellow' }} className='w-4 h-4 inline-block' />
                                   </IconButton>
                                   <IconButton
                                     isClean
@@ -395,16 +394,16 @@ export default function Chatbot(props: ChatbotProps) {
                                     }}
                                     isDisabled={loading}
                                   >
-                                    <PiGraphBold className='w-4 h-4 inline-block' />
+                                    <PiGraphBold style={{ color: 'cyan' }} className='w-4 h-4 inline-block' />
                                   </IconButton>
                                   <IconButton isDisabled={loading} isClean ariaLabel='Copy Icon' onClick={() => copy(chat.message)}>
-                                    <ClipboardDocumentIconOutline className='w-4 h-4 inline-block' />
+                                    <ClipboardDocumentIconOutline style={{ color: 'white' }} className='w-4 h-4 inline-block' />
                                   </IconButton>
-                                  <IconButton isDisabled={loading} isClean ariaLabel='Thumbs Up Icon' onClick={() =>  { submitFeedback(sessionId, 'good'); console.log(sessionId);}}>
-                                    <HiOutlineThumbUp className='w-4 h-4 inline-block' />
+                                  <IconButton isDisabled={loading} isClean ariaLabel='Thumbs Up Icon' onClick={() =>  submitFeedback(sessionId, 'good')}>
+                                    <HiOutlineThumbUp style={{ color: 'lime' }} className='w-4 h-4 inline-block' />
                                   </IconButton>
-                                  <IconButton isDisabled={loading} isClean ariaLabel='Thumbs Down Icon' onClick={() => { submitFeedback(sessionId, 'poor'); console.log(sessionId);}}>
-                                    <HiOutlineThumbDown className='w-4 h-4 inline-block'/>
+                                  <IconButton isDisabled={loading} isClean ariaLabel='Thumbs Down Icon' onClick={() => submitFeedback(sessionId, 'poor')}>
+                                    <HiOutlineThumbDown style={{ color: 'red' }} className='w-4 h-4 inline-block'/>
                                   </IconButton>
                                   {/*
                                   </IconButton isDisabled={loading} isClean ariaLabel='Refresh Icon'>
@@ -451,7 +450,7 @@ export default function Chatbot(props: ChatbotProps) {
                                       });
                                     }}
                                   >
-                                    <SpeakerWaveIconOutline className='w-4 h-4 inline-block' />
+                                    <SpeakerWaveIconOutline style={{ color: 'yellow' }} className='w-4 h-4 inline-block' />
                                   </IconButton>
                                 </>
                               )}
