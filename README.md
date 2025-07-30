@@ -62,7 +62,7 @@ Neo4j and Unstructured.io can be used together to build highly accurate, fully e
 - install python dependencies:
 
 ```
-pip install python-dotenv fastapi[standard] uvicorn openai unstructured_client unstructured_ingest neo4j neo4j-driver neo4j_graphrag neo4j_graphrag[openai]
+pip install python-dotenv 'fastapi[standard]' uvicorn openai unstructured_client unstructured_ingest neo4j neo4j-driver neo4j_graphrag 'neo4j_graphrag[openai]'
 ```
 
 - get an OpenAi API key https://openai.com/
